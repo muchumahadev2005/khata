@@ -1,0 +1,20 @@
+- [x] Modify deleteCustomer in useKhataData.ts to only remove customer, not transactions
+- [x] Update confirmation message in CustomerList.tsx to reflect that transactions will remain
+- [x] Modify TransactionHistory.tsx to group transactions by customer when viewing all transactions (show one entry per customer with aggregated info)
+- [x] Add manual entry mode to VoiceInput.tsx with form fields for customer name, amount, description, and type
+- [x] Test the changes to ensure transactions persist after customer deletion
+- [x] Create authentication types and interfaces
+- [x] Implement authentication context and provider
+- [x] Create login and signup pages with OTP verification
+- [x] Add user-specific data storage
+- [x] Update routing to show closable authentication modal on main page with header auth buttons when closed
+- [x] Add logout functionality to header
+- [x] Clear data when user logs out
+- [x] Add authentication protection to VoiceInput component (prevent data entry without sign-in)
+- [x] Add authentication protection to Dashboard component (show sign-in prompt when not authenticated)
+- [x] Add authentication protection to CustomerList component (show sign-in prompt when not authenticated)
+- [x] Add authentication protection to TransactionHistory component (show sign-in prompt when not authenticated)
+- [ ] Test the complete authentication flow with modal popup
+- [ ] Verify user-specific data isolation
+- [ ] Check OTP functionality
+- [ ] Ensure responsive design
