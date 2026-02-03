@@ -32,12 +32,9 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
             Please sign in or create an account to view and manage your customers.
           </p>
           <div className="flex gap-4">
-            <Button onClick={() => navigate('/login')} className="flex items-center gap-2">
+            <Button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none">
               <LogIn className="h-4 w-4" />
               Sign In
-            </Button>
-            <Button onClick={() => navigate('/signup')} variant="outline" className="flex items-center gap-2">
-              Create Account
             </Button>
           </div>
         </CardContent>

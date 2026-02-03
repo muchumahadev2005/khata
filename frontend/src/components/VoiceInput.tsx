@@ -44,6 +44,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
             description: "Please sign in or sign up to add transactions",
             variant: "destructive",
           });
+          localStorage.removeItem('token');
           navigate('/login');
           stopListening();
           return;
@@ -85,6 +86,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
         description: "Please sign in or sign up to add transactions",
         variant: "destructive",
       });
+      localStorage.removeItem('token');
       navigate('/login');
       return;
     }

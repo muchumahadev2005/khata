@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { User, AuthState } from '@/types/khata';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { User, AuthState } from "@/types/khata";
 
 interface AuthContextProps extends AuthState {
   login: (phone: string) => Promise<void>;
@@ -9,11 +15,11 @@ interface AuthContextProps extends AuthState {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-const AUTH_STORAGE_KEY = 'smart_credit_speak_auth_user';
+const AUTH_STORAGE_KEY = "smart_credit_speak_auth_user";
 
 const generateMockOTP = () => {
   // For demo purposes, generate a fixed OTP or random OTP
-  return '123456';
+  return "123456";
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -42,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // In real app, send OTP via SMS API here
       console.log(`OTP sent to ${phone}: ${otp}`);
     } catch (err) {
-      setError('Failed to send OTP. Please try again.');
+      setError("Failed to send OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -53,13 +59,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       if (!sentOTP || !otpExpiresAt) {
-        throw new Error('No OTP sent. Please request OTP again.');
+        throw new Error("No OTP sent. Please request OTP again.");
       }
       if (new Date() > otpExpiresAt) {
-        throw new Error('OTP expired. Please request OTP again.');
+        throw new Error("OTP expired. Please request OTP again.");
       }
       if (otp !== sentOTP) {
-        throw new Error('Invalid OTP. Please try again.');
+        throw new Error("Invalid OTP. Please try again.");
       }
       // OTP verified, create user session
       const newUser: User = {
@@ -74,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSentOTP(null);
       setOtpExpiresAt(null);
     } catch (err: any) {
-      setError(err.message || 'OTP verification failed.');
+      setError(err.message || "OTP verification failed.");
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +92,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, error, login, verifyOTP, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, error, login, verifyOTP, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -95,7 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
