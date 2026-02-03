@@ -78,7 +78,7 @@ function GoogleSignButton({ googleLogin }: { googleLogin: () => void }) {
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
       onClick={() => googleLogin()}
-      className={`flex items-center gap-4 px-4 py-3 rounded-md shadow-sm w-full max-w-md justify-center google-custom-btn transition-colors duration-150 ${active ? 'bg-sky-600 text-white' : 'bg-sky-400 text-white hover:bg-sky-500'}`}
+      className={`flex items-center gap-4 px-4 py-3 rounded-md shadow-sm w-full max-w-md justify-center google-custom-btn transition-colors duration-150 ${active ? "bg-sky-600 text-white" : "bg-sky-400 text-white hover:bg-sky-500"}`}
       type="button"
     >
       <span className="bg-white p-1 rounded-sm border mr-3">

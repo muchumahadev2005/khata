@@ -30,7 +30,10 @@ const Signup = () => {
 
         <CardContent className="space-y-6">
           {/* Sign In Button */}
-          <Button className="w-full bg-blue-800 text-white hover:bg-blue-900 border-none" onClick={handleSignIn}>
+          <Button
+            className="w-full bg-blue-800 text-white hover:bg-blue-900 border-none"
+            onClick={handleSignIn}
+          >
             Sign In
           </Button>
 

@@ -26,9 +26,7 @@ export const Header = ({ showAuthButtons = false }: HeaderProps) => {
               <BookOpen className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-700">
-                KHATA
-              </h1>
+              <h1 className="text-xl font-bold text-gray-700">KHATA</h1>
               <p className="text-sm text-muted-foreground">
                 Voice-powered ledger management
               </p>
@@ -58,8 +56,8 @@ export const Header = ({ showAuthButtons = false }: HeaderProps) => {
               <div className="flex items-center gap-2">
                 <Button
                   onClick={() => {
-                    localStorage.removeItem('token');
-                    navigate('/login');
+                    localStorage.removeItem("token");
+                    navigate("/login");
                   }}
                   size="sm"
                   className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none"

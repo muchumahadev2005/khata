@@ -1,28 +1,41 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Volume2, FileText } from 'lucide-react';
-import { useVoiceRecognition } from '@/hooks/useVoiceRecognition';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Mic, MicOff, Volume2, FileText } from "lucide-react";
+import { useVoiceRecognition } from "@/hooks/useVoiceRecognition";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
 
 interface VoiceInputProps {
-  onVoiceCommand: (customerName: string, amount: number, description: string, type: 'debt' | 'payment') => void;
+  onVoiceCommand: (
+    customerName: string,
+    amount: number,
+    description: string,
+    type: "debt" | "payment",
+  ) => void;
 }
 
 export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [manualCustomerName, setManualCustomerName] = React.useState('');
-  const [manualAmount, setManualAmount] = React.useState('');
-  const [manualDescription, setManualDescription] = React.useState('');
-  const [manualType, setManualType] = React.useState<'debt' | 'payment'>('debt');
+  const [manualCustomerName, setManualCustomerName] = React.useState("");
+  const [manualAmount, setManualAmount] = React.useState("");
+  const [manualDescription, setManualDescription] = React.useState("");
+  const [manualType, setManualType] = React.useState<"debt" | "payment">(
+    "debt",
+  );
 
   const {
     isListening,
@@ -44,12 +57,17 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
             description: "Please sign in or sign up to add transactions",
             variant: "destructive",
           });
-          localStorage.removeItem('token');
-          navigate('/login');
+          localStorage.removeItem("token");
+          navigate("/login");
           stopListening();
           return;
         }
-        onVoiceCommand(command.customerName, command.amount, command.description, command.type);
+        onVoiceCommand(
+          command.customerName,
+          command.amount,
+          command.description,
+          command.type,
+        );
         toast({
           title: "Voice command processed",
           description: `Added ${command.type} of ₹${command.amount} for ${command.customerName}`,
@@ -66,7 +84,15 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
         stopListening();
       }
     }
-  }, [transcript, parseVoiceCommand, onVoiceCommand, toast, stopListening, user, navigate]);
+  }, [
+    transcript,
+    parseVoiceCommand,
+    onVoiceCommand,
+    toast,
+    stopListening,
+    user,
+    navigate,
+  ]);
 
   React.useEffect(() => {
     if (error) {
@@ -86,11 +112,15 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
         description: "Please sign in or sign up to add transactions",
         variant: "destructive",
       });
-      localStorage.removeItem('token');
-      navigate('/login');
+      localStorage.removeItem("token");
+      navigate("/login");
       return;
     }
-    if (!manualCustomerName.trim() || !manualAmount || !manualDescription.trim()) {
+    if (
+      !manualCustomerName.trim() ||
+      !manualAmount ||
+      !manualDescription.trim()
+    ) {
       toast({
         title: "Missing information",
         description: "Please fill in all fields",
@@ -109,24 +139,31 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
       return;
     }
 
-    onVoiceCommand(manualCustomerName.trim(), amount, manualDescription.trim(), manualType);
+    onVoiceCommand(
+      manualCustomerName.trim(),
+      amount,
+      manualDescription.trim(),
+      manualType,
+    );
     toast({
       title: "Manual entry added",
       description: `Added ${manualType} of ₹${amount} for ${manualCustomerName}`,
     });
 
     // Clear form
-    setManualCustomerName('');
-    setManualAmount('');
-    setManualDescription('');
-    setManualType('debt');
+    setManualCustomerName("");
+    setManualAmount("");
+    setManualDescription("");
+    setManualType("debt");
   };
 
   if (!isSupported) {
     return (
       <Card className="p-6 text-center">
         <Volume2 className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-        <p className="text-muted-foreground">Voice recognition is not supported in this browser</p>
+        <p className="text-muted-foreground">
+          Voice recognition is not supported in this browser
+        </p>
       </Card>
     );
   }
@@ -161,9 +198,10 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                 size="lg"
                 className={`
                   relative h-16 w-16 rounded-full mx-auto
-                  ${isListening
-                    ? 'bg-gradient-to-br from-destructive to-destructive/80 animate-pulse-voice shadow-voice'
-                    : 'bg-gradient-primary hover:opacity-90'
+                  ${
+                    isListening
+                      ? "bg-gradient-to-br from-destructive to-destructive/80 animate-pulse-voice shadow-voice"
+                      : "bg-gradient-primary hover:opacity-90"
                   }
                 `}
               >
@@ -225,13 +263,22 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
 
               <div className="space-y-2">
                 <Label htmlFor="type">Type</Label>
-                <Select value={manualType} onValueChange={(value: 'debt' | 'payment') => setManualType(value)}>
+                <Select
+                  value={manualType}
+                  onValueChange={(value: "debt" | "payment") =>
+                    setManualType(value)
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="debt">Debt (Customer owes money)</SelectItem>
-                    <SelectItem value="payment">Payment (Customer paid money)</SelectItem>
+                    <SelectItem value="debt">
+                      Debt (Customer owes money)
+                    </SelectItem>
+                    <SelectItem value="payment">
+                      Payment (Customer paid money)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

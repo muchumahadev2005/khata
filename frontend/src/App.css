@@ -46,7 +46,9 @@
   background: white !important;
   color: #1f2937 !important; /* gray-800 */
   border: 1px solid #e5e7eb !important; /* gray-200 */
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 .google-login-wrapper button:hover {
   background: #7dd3fc !important; /* skyblue */

@@ -1,10 +1,10 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, IndianRupee, TrendingUp, Clock, LogIn } from 'lucide-react';
-import { KhataStats } from '@/types/khata';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, IndianRupee, TrendingUp, Clock, LogIn } from "lucide-react";
+import { KhataStats } from "@/types/khata";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardProps {
   stats: KhataStats;
@@ -23,10 +23,17 @@ export const Dashboard = ({ stats }: DashboardProps) => {
             Sign In Required
           </h3>
           <p className="text-muted-foreground text-center mb-6 max-w-md">
-            Please sign in or create an account to view your dashboard and manage your khata records.
+            Please sign in or create an account to view your dashboard and
+            manage your khata records.
           </p>
           <div className="flex gap-4">
-            <Button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none">
+            <Button
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
+              className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none"
+            >
               <LogIn className="h-4 w-4" />
               Sign In
             </Button>
@@ -89,16 +96,16 @@ export const Dashboard = ({ stats }: DashboardProps) => {
             <Clock className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-accent">
-              Live
-            </div>
+            <div className="text-2xl font-bold text-accent">Live</div>
           </CardContent>
         </Card>
       </div>
 
       <Card className="bg-gradient-card border-0 shadow-card">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">Recent Transactions</CardTitle>
+          <CardTitle className="text-lg font-semibold">
+            Recent Transactions
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {stats.recentTransactions.length === 0 ? (
@@ -114,13 +121,20 @@ export const Dashboard = ({ stats }: DashboardProps) => {
                 >
                   <div className="flex-1">
                     <p className="font-medium">{transaction.customerName}</p>
-                    <p className="text-sm text-muted-foreground">{transaction.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {transaction.description}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <p className={`font-semibold ${
-                      transaction.type === 'debt' ? 'text-warning' : 'text-success'
-                    }`}>
-                      {transaction.type === 'debt' ? '+' : '-'}₹{transaction.amount}
+                    <p
+                      className={`font-semibold ${
+                        transaction.type === "debt"
+                          ? "text-warning"
+                          : "text-success"
+                      }`}
+                    >
+                      {transaction.type === "debt" ? "+" : "-"}₹
+                      {transaction.amount}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {new Date(transaction.date).toLocaleDateString()}

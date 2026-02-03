@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Search, User, IndianRupee, Trash2, LogIn } from 'lucide-react';
-import { Customer } from '@/types/khata';
-import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Search, User, IndianRupee, Trash2, LogIn } from "lucide-react";
+import { Customer } from "@/types/khata";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface CustomerListProps {
   customers: Customer[];
@@ -15,8 +15,12 @@ interface CustomerListProps {
   onDeleteCustomer: (customerId: string) => void;
 }
 
-export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: CustomerListProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const CustomerList = ({
+  customers,
+  onSelectCustomer,
+  onDeleteCustomer,
+}: CustomerListProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -29,10 +33,17 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
             Sign In Required
           </h3>
           <p className="text-muted-foreground text-center mb-6 max-w-md">
-            Please sign in or create an account to view and manage your customers.
+            Please sign in or create an account to view and manage your
+            customers.
           </p>
           <div className="flex gap-4">
-            <Button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none">
+            <Button
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
+              className="flex items-center gap-2 bg-sky-400 text-white hover:bg-sky-500 border-none"
+            >
               <LogIn className="h-4 w-4" />
               Sign In
             </Button>
@@ -42,9 +53,17 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
     );
   }
 
-  const handleDeleteClick = (e: React.MouseEvent, customerId: string, customerName: string) => {
+  const handleDeleteClick = (
+    e: React.MouseEvent,
+    customerId: string,
+    customerName: string,
+  ) => {
     e.stopPropagation(); // Prevent triggering onSelectCustomer
-    if (confirm(`Are you sure you want to delete ${customerName}? Their transactions will remain in the history.`)) {
+    if (
+      confirm(
+        `Are you sure you want to delete ${customerName}? Their transactions will remain in the history.`,
+      )
+    ) {
       onDeleteCustomer(customerId);
       toast({
         title: "Customer deleted",
@@ -53,9 +72,10 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
     }
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (customer.phone && customer.phone.includes(searchTerm))
+  const filteredCustomers = customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (customer.phone && customer.phone.includes(searchTerm)),
   );
 
   return (
@@ -80,10 +100,9 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
           <div className="text-center py-8">
             <User className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
             <p className="text-muted-foreground">
-              {customers.length === 0 
-                ? 'No customers yet. Add transactions via voice commands!'
-                : 'No customers found matching your search.'
-              }
+              {customers.length === 0
+                ? "No customers yet. Add transactions via voice commands!"
+                : "No customers found matching your search."}
             </p>
           </div>
         ) : (
@@ -91,16 +110,22 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
             {filteredCustomers
               .sort((a, b) => b.totalDebt - a.totalDebt)
               .map((customer) => (
-               <div
-                 key={customer.id}
-                 onClick={() => onSelectCustomer(customer)}
-                 className="flex items-center justify-between p-4 rounded-lg bg-background/50 hover:bg-background/80 cursor-pointer transition-colors"
-               >
-                 <div className="flex-1">
+                <div
+                  key={customer.id}
+                  onClick={() => onSelectCustomer(customer)}
+                  className="flex items-center justify-between p-4 rounded-lg bg-background/50 hover:bg-background/80 cursor-pointer transition-colors"
+                >
+                  <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="font-medium">{customer.name}</p>
                       {customer.totalDebt > 0 && (
-                        <Badge variant={customer.totalDebt > 1000 ? "destructive" : "secondary"}>
+                        <Badge
+                          variant={
+                            customer.totalDebt > 1000
+                              ? "destructive"
+                              : "secondary"
+                          }
+                        >
                           ₹{customer.totalDebt}
                         </Badge>
                       )}
@@ -110,43 +135,55 @@ export const CustomerList = ({ customers, onSelectCustomer, onDeleteCustomer }: 
                         </Badge>
                       )}
                     </div>
-                   {customer.phone && (
-                     <p className="text-sm text-muted-foreground">{customer.phone}</p>
-                   )}
-                   <p className="text-xs text-muted-foreground">
-                     Last updated: {new Date(customer.updatedAt).toLocaleDateString()}
-                   </p>
-                 </div>
+                    {customer.phone && (
+                      <p className="text-sm text-muted-foreground">
+                        {customer.phone}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Last updated:{" "}
+                      {new Date(customer.updatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
                   <div className="flex items-center gap-3">
                     <div className="text-right">
                       {customer.totalDebt > 0 ? (
                         <div className="flex items-center gap-1 text-warning">
                           <IndianRupee className="h-4 w-4" />
-                          <span className="font-semibold">{customer.totalDebt}</span>
+                          <span className="font-semibold">
+                            {customer.totalDebt}
+                          </span>
                         </div>
                       ) : customer.totalDebt < 0 ? (
                         <div className="flex items-center gap-1 text-credit">
                           <IndianRupee className="h-4 w-4" />
-                          <span className="font-semibold">{Math.abs(customer.totalDebt)}</span>
+                          <span className="font-semibold">
+                            {Math.abs(customer.totalDebt)}
+                          </span>
                           <span className="text-xs">Credit</span>
                         </div>
                       ) : (
-                        <Badge variant="outline" className="text-success border-success">
+                        <Badge
+                          variant="outline"
+                          className="text-success border-success"
+                        >
                           Clear
                         </Badge>
                       )}
                     </div>
-                   <Button
-                     variant="ghost"
-                     size="icon"
-                     onClick={(e) => handleDeleteClick(e, customer.id, customer.name)}
-                     className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                   >
-                     <Trash2 className="h-4 w-4" />
-                   </Button>
-                 </div>
-               </div>
-            ))}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) =>
+                        handleDeleteClick(e, customer.id, customer.name)
+                      }
+                      className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
           </div>
         )}
       </CardContent>
