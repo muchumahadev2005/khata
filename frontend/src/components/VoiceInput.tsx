@@ -31,9 +31,14 @@ interface VoiceInputProps {
     amount: string;
     type: "debt" | "payment";
   };
+  onClear?: () => void;
 }
 
-export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
+export const VoiceInput = ({
+  onVoiceCommand,
+  editData,
+  onClear,
+}: VoiceInputProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -55,6 +60,18 @@ export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
   const [activeTab, setActiveTab] = React.useState(
     editData ? "manual" : "voice",
   );
+
+  // Sync when editData changes (e.g., customer selected)
+  React.useEffect(() => {
+    if (editData) {
+      setManualCustomerName(editData.customerName || "");
+      setManualPhone(editData.phone || "");
+      setManualDescription(editData.description || "");
+      setManualAmount(editData.amount || "");
+      setManualType(editData.type || "debt");
+      setActiveTab("manual");
+    }
+  }, [editData]);
 
   const {
     isListening,
@@ -264,6 +281,11 @@ export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
                   onChange={(e) => setManualCustomerName(e.target.value)}
                   disabled={!!editData}
                 />
+                {editData && (
+                  <p className="text-xs text-muted-foreground">
+                    Customer locked
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
@@ -274,6 +296,9 @@ export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
                   onChange={(e) => setManualPhone(e.target.value)}
                   disabled={!!editData}
                 />
+                {editData && (
+                  <p className="text-xs text-muted-foreground">Phone locked</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -330,6 +355,25 @@ export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
               >
                 Add Transaction
               </Button>
+              {editData && onClear && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    // reset local state and call clear handler
+                    setManualCustomerName("");
+                    setManualPhone("");
+                    setManualAmount("");
+                    setManualDescription("");
+                    setManualType("debt");
+                    setActiveTab("voice");
+                    onClear();
+                  }}
+                >
+                  Clear Selection
+                </Button>
+              )}
             </form>
           </TabsContent>
         </Tabs>

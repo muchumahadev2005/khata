@@ -186,6 +186,11 @@ export const CustomerList = ({
                       size="icon"
                       className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
                       tabIndex={-1}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectCustomer(customer);
+                      }}
+                      aria-label={`Select ${customer.name} for manual entry`}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -60,7 +60,21 @@ const Index = () => {
         <div className="grid gap-6 lg:grid-cols-4">
           {/* Voice Input - Always visible */}
           <div className="lg:col-span-1 space-y-4">
-            <VoiceInput onVoiceCommand={handleVoiceCommand} />
+            <VoiceInput
+              onVoiceCommand={handleVoiceCommand}
+              editData={
+                selectedCustomer
+                  ? {
+                      customerName: selectedCustomer.name,
+                      phone: selectedCustomer.phone || "",
+                      description: `Locked: ${selectedCustomer.name}`,
+                      amount: "",
+                      type: "debt",
+                    }
+                  : undefined
+              }
+              onClear={() => setSelectedCustomer(null)}
+            />
           </div>
 
           {/* Main Content */}
