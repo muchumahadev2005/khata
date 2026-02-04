@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 interface TransactionHistoryProps {
   transactions: Transaction[];
   customer?: Customer;
+  onEditTransaction?: (transaction: Transaction) => void;
 }
 
 export const TransactionHistory = ({
   transactions,
   customer,
+  onEditTransaction,
 }: TransactionHistoryProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -173,9 +175,7 @@ export const TransactionHistory = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() =>
-                        navigate(`/edit-transaction/${transaction.id}`)
-                      }
+                      onClick={() => onEditTransaction(transaction)}
                       className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
                     >
                       <svg

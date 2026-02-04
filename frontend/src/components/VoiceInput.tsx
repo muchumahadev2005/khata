@@ -24,18 +24,36 @@ interface VoiceInputProps {
     description: string,
     type: "debt" | "payment",
   ) => void;
+  editData?: {
+    customerName: string;
+    phone: string;
+    description: string;
+    amount: string;
+    type: "debt" | "payment";
+  };
 }
 
-export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
+export const VoiceInput = ({ onVoiceCommand, editData }: VoiceInputProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [manualCustomerName, setManualCustomerName] = React.useState("");
-  const [manualPhone, setManualPhone] = React.useState("");
-  const [manualAmount, setManualAmount] = React.useState("");
-  const [manualDescription, setManualDescription] = React.useState("");
+  const [manualCustomerName, setManualCustomerName] = React.useState(
+    editData ? editData.customerName : "",
+  );
+  const [manualPhone, setManualPhone] = React.useState(
+    editData ? editData.phone : "",
+  );
+  const [manualAmount, setManualAmount] = React.useState(
+    editData ? editData.amount : "",
+  );
+  const [manualDescription, setManualDescription] = React.useState(
+    editData ? editData.description : "",
+  );
   const [manualType, setManualType] = React.useState<"debt" | "payment">(
-    "debt",
+    editData ? editData.type : "debt",
+  );
+  const [activeTab, setActiveTab] = React.useState(
+    editData ? "manual" : "voice",
   );
 
   const {
@@ -178,9 +196,13 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
         <CardTitle className="text-lg font-semibold">Add Transaction</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="voice" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="voice" className="flex items-center gap-2">
+            <TabsTrigger
+              value="voice"
+              className="flex items-center gap-2"
+              disabled={!!editData}
+            >
               <Mic className="h-4 w-4" />
               Voice
             </TabsTrigger>
@@ -240,6 +262,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   placeholder="Enter customer name"
                   value={manualCustomerName}
                   onChange={(e) => setManualCustomerName(e.target.value)}
+                  disabled={!!editData}
                 />
               </div>
               <div className="space-y-2">
@@ -249,6 +272,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   placeholder="Enter phone number"
                   value={manualPhone}
                   onChange={(e) => setManualPhone(e.target.value)}
+                  disabled={!!editData}
                 />
               </div>
 
@@ -261,6 +285,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   placeholder="Enter amount"
                   value={manualAmount}
                   onChange={(e) => setManualAmount(e.target.value)}
+                  disabled={false}
                 />
               </div>
 
@@ -271,6 +296,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   placeholder="Enter description"
                   value={manualDescription}
                   onChange={(e) => setManualDescription(e.target.value)}
+                  disabled={!!editData}
                 />
               </div>
 
@@ -281,6 +307,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   onValueChange={(value: "debt" | "payment") =>
                     setManualType(value)
                   }
+                  disabled={false}
                 >
                   <SelectTrigger>
                     <SelectValue />

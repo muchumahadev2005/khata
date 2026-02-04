@@ -184,11 +184,8 @@ export const CustomerList = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/edit-transaction/${customer.id}`);
-                      }}
                       className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
+                      tabIndex={-1}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
