@@ -43,6 +43,8 @@ export const Dashboard = ({ stats }: DashboardProps) => {
     );
   }
 
+  const recentTransactions = stats?.recentTransactions ?? [];
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -108,19 +110,21 @@ export const Dashboard = ({ stats }: DashboardProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {stats.recentTransactions.length === 0 ? (
+          {recentTransactions.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               No transactions yet. Start by adding a voice command!
             </p>
           ) : (
             <div className="space-y-3">
-              {stats.recentTransactions.map((transaction) => (
+              {recentTransactions.map((transaction) => (
                 <div
-                  key={transaction.id}
+                  key={transaction._id}
                   className="flex items-center justify-between p-3 rounded-lg bg-background/50"
                 >
                   <div className="flex-1">
-                    <p className="font-medium">{transaction.customerName}</p>
+                    <p className="font-medium">
+                      {transaction.customerId?.name ?? "Unknown Customer"}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {transaction.description}
                     </p>
@@ -128,16 +132,18 @@ export const Dashboard = ({ stats }: DashboardProps) => {
                   <div className="text-right">
                     <p
                       className={`font-semibold ${
-                        transaction.type === "debt"
+                        (transaction.type ?? "").toLowerCase() === "debt"
                           ? "text-warning"
                           : "text-success"
                       }`}
                     >
-                      {transaction.type === "debt" ? "+" : "-"}₹
-                      {transaction.amount}
+                      {(transaction.type ?? "").toLowerCase() === "debt"
+                        ? "+"
+                        : "-"}
+                      ₹{transaction.amount}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(transaction.date).toLocaleDateString()}
+                      {new Date(transaction.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>

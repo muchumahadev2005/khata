@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 interface VoiceInputProps {
   onVoiceCommand: (
     customerName: string,
+    phoneNumber: string,
     amount: number,
     description: string,
     type: "debt" | "payment",
@@ -100,6 +101,7 @@ export const VoiceInput = ({
         }
         onVoiceCommand(
           command.customerName,
+          manualPhone.trim(),
           command.amount,
           command.description,
           command.type,
@@ -179,6 +181,7 @@ export const VoiceInput = ({
 
     onVoiceCommand(
       manualCustomerName.trim(),
+      manualPhone.trim(),
       amount,
       manualDescription.trim(),
       manualType,

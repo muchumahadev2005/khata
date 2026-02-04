@@ -58,7 +58,7 @@ export const CustomerList = ({
     customerId: string,
     customerName: string,
   ) => {
-    e.stopPropagation(); // Prevent triggering onSelectCustomer
+    e.stopPropagation();
     if (
       confirm(
         `Are you sure you want to delete ${customerName}? Their transactions will remain in the history.`,
@@ -72,11 +72,14 @@ export const CustomerList = ({
     }
   };
 
-  const filteredCustomers = customers.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (customer.phone && customer.phone.includes(searchTerm)),
-  );
+  // Safe filtering: default empty strings to avoid .toLowerCase() crashes
+  const filteredCustomers = customers.filter((customer) => {
+    const name = (customer.name ?? "").toLowerCase();
+    const phone = customer.phone ?? "";
+    const q = (searchTerm ?? "").toLowerCase();
+
+    return name.includes(q) || phone.includes(searchTerm ?? "");
+  });
 
   return (
     <Card className="bg-gradient-card border-0 shadow-card">
@@ -108,16 +111,18 @@ export const CustomerList = ({
         ) : (
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {filteredCustomers
-              .sort((a, b) => b.totalDebt - a.totalDebt)
+              .sort((a, b) => (b.totalDebt ?? 0) - (a.totalDebt ?? 0))
               .map((customer) => (
                 <div
-                  key={customer.id}
+                  key={customer._id}
                   onClick={() => onSelectCustomer(customer)}
                   className="flex items-center justify-between p-4 rounded-lg bg-background/50 hover:bg-background/80 cursor-pointer transition-colors"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium">{customer.name}</p>
+                      <p className="font-medium">
+                        {customer.name || "Unknown Customer"}
+                      </p>
                       {customer.totalDebt > 0 && (
                         <Badge
                           variant={
@@ -175,37 +180,15 @@ export const CustomerList = ({
                       variant="ghost"
                       size="icon"
                       onClick={(e) =>
-                        handleDeleteClick(e, customer.id, customer.name)
+                        handleDeleteClick(
+                          e,
+                          customer._id,
+                          customer.name || "Customer",
+                        )
                       }
                       className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
-                      tabIndex={-1}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectCustomer(customer);
-                      }}
-                      aria-label={`Select ${customer.name} for manual entry`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L5 11.828a2 2 0 010-2.828L9 13z"
-                        />
-                      </svg>
                     </Button>
                   </div>
                 </div>

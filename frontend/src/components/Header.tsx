@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Mic, LogOut, LogIn, UserPlus } from "lucide-react";
+import { BookOpen, Mic, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -32,15 +32,17 @@ export const Header = ({ showAuthButtons = false }: HeaderProps) => {
               </p>
             </div>
           </div>
+
           <div className="flex sm:items-center items-start sm:flex-row flex-col gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Mic className="h-4 w-4 text-accent" />
               <span>Voice Ready</span>
             </div>
+
             {user ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
-                  Welcome, {user.phone}
+                  Welcome, {user.name || user.email}
                 </span>
                 <Button
                   variant="outline"

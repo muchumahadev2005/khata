@@ -1,6 +1,5 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { useKhataData } from "@/hooks/useKhataData";
 import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
@@ -9,14 +8,16 @@ import { Dashboard } from "@/components/Dashboard";
 import { CustomerList } from "@/components/CustomerList";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { Customer } from "@/types/khata";
-import { LayoutDashboard, Users, History, Mic, LogIn } from "lucide-react";
+import { LayoutDashboard, Users, History } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [selectedCustomer, setSelectedCustomer] =
     React.useState<Customer | null>(null);
+
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const {
     customers,
     transactions,
@@ -26,13 +27,15 @@ const Index = () => {
     getStats,
   } = useKhataData();
 
+  /* ✅ FIXED: phoneNumber INCLUDED */
   const handleVoiceCommand = (
     customerName: string,
+    phoneNumber: string,
     amount: number,
     description: string,
     type: "debt" | "payment",
   ) => {
-    addTransaction(customerName, amount, description, type);
+    addTransaction(customerName, phoneNumber, amount, description, type);
   };
 
   const handleSelectCustomer = (customer: Customer) => {
@@ -40,8 +43,7 @@ const Index = () => {
   };
 
   const handleDeleteCustomer = (customerId: string) => {
-    // If the selected customer is being deleted, clear selection
-    if (selectedCustomer?.id === customerId) {
+    if (selectedCustomer?._id === customerId) {
       setSelectedCustomer(null);
     }
     deleteCustomer(customerId);
@@ -49,7 +51,7 @@ const Index = () => {
 
   const stats = getStats();
   const customerTransactions = selectedCustomer
-    ? getCustomerTransactions(selectedCustomer.id)
+    ? getCustomerTransactions(selectedCustomer._id)
     : [];
 
   return (
@@ -58,7 +60,7 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6 lg:grid-cols-4">
-          {/* Voice Input - Always visible */}
+          {/* Voice / Manual Input */}
           <div className="lg:col-span-1 space-y-4">
             <VoiceInput
               onVoiceCommand={handleVoiceCommand}
@@ -81,24 +83,15 @@ const Index = () => {
           <div className="lg:col-span-3">
             <Tabs defaultValue="dashboard" className="space-y-6">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger
-                  value="dashboard"
-                  className="flex items-center gap-2"
-                >
+                <TabsTrigger value="dashboard" className="flex gap-2">
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger
-                  value="customers"
-                  className="flex items-center gap-2"
-                >
+                <TabsTrigger value="customers" className="flex gap-2">
                   <Users className="h-4 w-4" />
                   Customers
                 </TabsTrigger>
-                <TabsTrigger
-                  value="transactions"
-                  className="flex items-center gap-2"
-                >
+                <TabsTrigger value="transactions" className="flex gap-2">
                   <History className="h-4 w-4" />
                   Transactions
                 </TabsTrigger>
@@ -131,8 +124,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-
-      {/* Authentication modal removed — header Sign In button handles navigation */}
     </div>
   );
 };

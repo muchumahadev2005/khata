@@ -1,20 +1,24 @@
 export interface Customer {
-  id: string;
+  _id: string;
   name: string;
-  phone?: string;
+  phone: string;
   totalDebt: number;
-  createdAt: Date;
-  updatedAt: Date;
+  updatedAt: string;
+}
+
+export interface TransactionCustomerRef {
+  _id: string;
+  name: string;
+  phone: string;
 }
 
 export interface Transaction {
-  id: string;
-  customerId: string;
-  customerName: string;
-  type: 'debt' | 'payment' | 'adjustment';
+  _id: string;
+  type: 'DEBT' | 'PAYMENT';
   amount: number;
   description: string;
-  date: Date;
+  createdAt: string;
+  customerId: TransactionCustomerRef; // populated by backend
   paymentMethod?: 'cash' | 'digital' | 'check';
 }
 
@@ -25,23 +29,15 @@ export interface KhataStats {
   recentTransactions: Transaction[];
 }
 
-// Authentication related types
+// Minimal authentication types used in UI
 export interface User {
   id: string;
-  phone: string;
-  isVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  email?: string;
+  name?: string;
 }
 
 export interface AuthState {
   user: User | null;
   isLoading: boolean;
   error: string | null;
-}
-
-export interface OTPVerification {
-  phone: string;
-  otp: string;
-  expiresAt: Date;
 }

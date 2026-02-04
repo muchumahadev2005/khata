@@ -57,7 +57,7 @@ export const TransactionHistory = ({
     ? null
     : transactions.reduce(
         (acc, transaction) => {
-          const key = transaction.customerName;
+          const key = transaction.customerId?.name ?? "Unknown Customer";
           if (!acc[key]) {
             acc[key] = [];
           }
@@ -71,21 +71,22 @@ export const TransactionHistory = ({
     ? Object.entries(groupedTransactions)
         .map(([customerName, customerTransactions]) => {
           const totalDebt = customerTransactions
-            .filter((t) => t.type === "debt")
+            .filter((t) => (t.type ?? "").toLowerCase() === "debt")
             .reduce((sum, t) => sum + t.amount, 0);
           const totalPayments = customerTransactions
-            .filter((t) => t.type === "payment")
+            .filter((t) => (t.type ?? "").toLowerCase() === "payment")
             .reduce((sum, t) => sum + t.amount, 0);
           const netAmount = totalDebt - totalPayments;
           const latestTransaction = customerTransactions.sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           )[0];
 
           return {
             customerName,
             transactionCount: customerTransactions.length,
             netAmount,
-            latestDate: latestTransaction.date,
+            latestDate: latestTransaction.createdAt,
           };
         })
         .sort(
@@ -116,11 +117,12 @@ export const TransactionHistory = ({
             {transactions
               .sort(
                 (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime(),
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime(),
               )
               .map((transaction) => (
                 <div
-                  key={transaction.id}
+                  key={transaction._id}
                   className="flex items-center justify-between p-4 rounded-lg bg-background/50"
                 >
                   <div className="flex items-center gap-3">
@@ -128,13 +130,13 @@ export const TransactionHistory = ({
                       className={`
                     p-2 rounded-full
                     ${
-                      transaction.type === "debt"
+                      (transaction.type ?? "").toLowerCase() === "debt"
                         ? "bg-warning/10 text-warning"
                         : "bg-success/10 text-success"
                     }
                   `}
                     >
-                      {transaction.type === "debt" ? (
+                      {(transaction.type ?? "").toLowerCase() === "debt" ? (
                         <ArrowUpRight className="h-4 w-4" />
                       ) : (
                         <ArrowDownLeft className="h-4 w-4" />
@@ -146,7 +148,7 @@ export const TransactionHistory = ({
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
-                          {transaction.type}
+                          {(transaction.type ?? "").toLowerCase()}
                         </Badge>
                         {transaction.paymentMethod && (
                           <Badge variant="secondary" className="text-xs">
@@ -160,22 +162,24 @@ export const TransactionHistory = ({
                     <div className="text-right">
                       <p
                         className={`font-semibold ${
-                          transaction.type === "debt"
+                          (transaction.type ?? "").toLowerCase() === "debt"
                             ? "text-warning"
                             : "text-success"
                         }`}
                       >
-                        {transaction.type === "debt" ? "+" : "-"}₹
-                        {transaction.amount}
+                        {(transaction.type ?? "").toLowerCase() === "debt"
+                          ? "+"
+                          : "-"}
+                        ₹{transaction.amount}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(transaction.date).toLocaleString()}
+                        {new Date(transaction.createdAt).toLocaleString()}
                       </p>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEditTransaction(transaction)}
+                      onClick={() => onEditTransaction?.(transaction)}
                       className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
                     >
                       <svg
