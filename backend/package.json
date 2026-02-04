@@ -2,12 +2,11 @@
   "name": "smart-credit-speak-backend",
   "version": "1.0.0",
   "description": "Backend for Smart Credit Speak",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-}
-,
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.6",

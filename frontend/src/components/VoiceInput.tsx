@@ -31,6 +31,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [manualCustomerName, setManualCustomerName] = React.useState("");
+  const [manualPhone, setManualPhone] = React.useState("");
   const [manualAmount, setManualAmount] = React.useState("");
   const [manualDescription, setManualDescription] = React.useState("");
   const [manualType, setManualType] = React.useState<"debt" | "payment">(
@@ -116,14 +117,16 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
       navigate("/login");
       return;
     }
+
     if (
       !manualCustomerName.trim() ||
+      !manualPhone.trim() ||
       !manualAmount ||
       !manualDescription.trim()
     ) {
       toast({
         title: "Missing information",
-        description: "Please fill in all fields",
+        description: "Please fill in all fields including phone number",
         variant: "destructive",
       });
       return;
@@ -152,6 +155,7 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
 
     // Clear form
     setManualCustomerName("");
+    setManualPhone("");
     setManualAmount("");
     setManualDescription("");
     setManualType("debt");
@@ -238,6 +242,15 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                   onChange={(e) => setManualCustomerName(e.target.value)}
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  placeholder="Enter phone number"
+                  value={manualPhone}
+                  onChange={(e) => setManualPhone(e.target.value)}
+                />
+              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount (₹)</Label>
@@ -283,7 +296,11 @@ export const VoiceInput = ({ onVoiceCommand }: VoiceInputProps) => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                style={{ backgroundColor: "#38bdf8", color: "#fff" }}
+              >
                 Add Transaction
               </Button>
             </form>
