@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, User, IndianRupee, Trash2, LogIn } from "lucide-react";
+import { Search, User, IndianRupee, Trash2, LogIn, Pencil } from "lucide-react";
 import { Customer } from "@/types/khata";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -176,6 +176,21 @@ export const CustomerList = ({
                         </Badge>
                       )}
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast({
+                          title: "Edit coming soon",
+                          description:
+                            "The edit customer feature is not implemented yet.",
+                        });
+                      }}
+                      className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
