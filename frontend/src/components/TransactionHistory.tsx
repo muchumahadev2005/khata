@@ -52,12 +52,17 @@ export const TransactionHistory = ({
     );
   }
 
+  const normalizeType = (type?: string) => type?.toLowerCase();
+
   // If no specific customer, group transactions by customer
   const groupedTransactions = customer
     ? null
     : transactions.reduce(
         (acc, transaction) => {
-          const key = transaction.customerId?.name ?? "Unknown Customer";
+          const key =
+            transaction.customerName ??
+            transaction.customerId?.name ??
+            "Unknown Customer";
           if (!acc[key]) {
             acc[key] = [];
           }
@@ -71,10 +76,10 @@ export const TransactionHistory = ({
     ? Object.entries(groupedTransactions)
         .map(([customerName, customerTransactions]) => {
           const totalDebt = customerTransactions
-            .filter((t) => (t.type ?? "").toLowerCase() === "debt")
+            .filter((t) => normalizeType(t.type) === "debt")
             .reduce((sum, t) => sum + t.amount, 0);
           const totalPayments = customerTransactions
-            .filter((t) => (t.type ?? "").toLowerCase() === "payment")
+            .filter((t) => normalizeType(t.type) === "payment")
             .reduce((sum, t) => sum + t.amount, 0);
           const netAmount = totalDebt - totalPayments;
           const latestTransaction = customerTransactions.sort(
@@ -130,13 +135,13 @@ export const TransactionHistory = ({
                       className={`
                     p-2 rounded-full
                     ${
-                      (transaction.type ?? "").toLowerCase() === "debt"
+                      normalizeType(transaction.type) === "debt"
                         ? "bg-warning/10 text-warning"
                         : "bg-success/10 text-success"
                     }
                   `}
                     >
-                      {(transaction.type ?? "").toLowerCase() === "debt" ? (
+                      {normalizeType(transaction.type) === "debt" ? (
                         <ArrowUpRight className="h-4 w-4" />
                       ) : (
                         <ArrowDownLeft className="h-4 w-4" />
@@ -148,7 +153,7 @@ export const TransactionHistory = ({
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
-                          {(transaction.type ?? "").toLowerCase()}
+                          {normalizeType(transaction.type)}
                         </Badge>
                         {transaction.paymentMethod && (
                           <Badge variant="secondary" className="text-xs">
@@ -162,14 +167,12 @@ export const TransactionHistory = ({
                     <div className="text-right">
                       <p
                         className={`font-semibold ${
-                          (transaction.type ?? "").toLowerCase() === "debt"
+                          normalizeType(transaction.type) === "debt"
                             ? "text-warning"
                             : "text-success"
                         }`}
                       >
-                        {(transaction.type ?? "").toLowerCase() === "debt"
-                          ? "+"
-                          : "-"}
+                        {normalizeType(transaction.type) === "debt" ? "+" : "-"}
                         ₹{transaction.amount}
                       </p>
                       <p className="text-xs text-muted-foreground">

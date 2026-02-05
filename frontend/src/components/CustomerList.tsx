@@ -171,6 +171,7 @@ export const CustomerList = ({
                         <Badge
                           variant="outline"
                           className="text-success border-success"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           Clear
                         </Badge>
@@ -181,11 +182,7 @@ export const CustomerList = ({
                       size="icon"
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast({
-                          title: "Edit coming soon",
-                          description:
-                            "The edit customer feature is not implemented yet.",
-                        });
+                        onSelectCustomer(customer);
                       }}
                       className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
                     >

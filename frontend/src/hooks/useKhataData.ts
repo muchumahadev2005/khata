@@ -48,7 +48,7 @@ export const useKhataData = () => {
     type: "debt" | "payment"
   ) => {
     await apiAddTransaction({
-      name: customerName,
+      customerName,
       phoneNumber: phoneNumber || undefined,
       amount,
       description,
@@ -70,16 +70,25 @@ export const useKhataData = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const normalizeType = (type?: string) => type?.toLowerCase();
+
+    const totalDebt = transactions
+      .filter((t) => normalizeType(t.type) === "debt")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalPayments = transactions
+      .filter((t) => normalizeType(t.type) === "payment")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalOutstandingDebt = totalDebt - totalPayments;
+
     const todayTx = transactions.filter(
       (t) => new Date(t.createdAt) >= today
     );
 
     return {
       totalCustomers: customers.length,
-      totalOutstandingDebt: customers.reduce(
-        (s, c) => s + (c.totalDebt || 0),
-        0
-      ),
+      totalOutstandingDebt,
       totalTransactionsToday: todayTx.length,
       recentTransactions: transactions.slice(0, 5),
     };

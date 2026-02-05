@@ -19,6 +19,7 @@ export interface Transaction {
   description: string;
   createdAt: string;
   customerId: TransactionCustomerRef; // populated by backend
+  customerName?: string; // snapshot name from backend
   paymentMethod?: 'cash' | 'digital' | 'check';
 }
 

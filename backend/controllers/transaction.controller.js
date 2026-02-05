@@ -5,29 +5,57 @@ const Transaction = require("../models/Transaction.model");
 // ➕ ADD TRANSACTION
 exports.addTransaction = async (req, res) => {
   try {
-    // ✅ CHANGE HERE
     if (!mongoose.Types.ObjectId.isValid(req.userId)) {
       return res.status(400).json({ message: "Invalid user id in token" });
     }
 
-    // ✅ CHANGE HERE
     const userId = new mongoose.Types.ObjectId(req.userId);
-    const { name, phone, amount, type, description } = req.body;
+    const { customerName, phoneNumber, amount, type, description } = req.body;
 
-    let customer = await Customer.findOne({ userId, phone });
-    if (!customer) {
-      customer = await Customer.create({ userId, name, phone });
+    // Step 1: basic validation
+    if (!customerName || !String(customerName).trim()) {
+      return res.status(400).json({ message: "Customer name is required" });
+    }
+    if (!phoneNumber || !String(phoneNumber).trim()) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+    if (amount == null) {
+      return res.status(400).json({ message: "Amount is required" });
+    }
+    if (!type) {
+      return res.status(400).json({ message: "Type is required" });
     }
 
+    const normalizedName = String(customerName).trim();
+    const normalizedPhone = String(phoneNumber).trim();
+
+    // Always store transaction type in uppercase for consistency
+    const normalizedType = String(type).toUpperCase(); // "DEBT" | "PAYMENT"
+
+    // Step 2: find customer by userId + phoneNumber only
+    let customer = await Customer.findOne({ userId, phone: normalizedPhone });
+
+    // Step 3: create customer if not found
+    if (!customer) {
+      customer = await Customer.create({
+        userId,
+        name: normalizedName,
+        phone: normalizedPhone,
+      });
+    }
+
+    // Step 4: create transaction snapshotting customerName
     const transaction = await Transaction.create({
       userId,
       customerId: customer._id,
-      type,
+      customerName: normalizedName,
+      type: normalizedType,
       amount,
-      description
+      description,
     });
 
-    res.status(201).json(transaction);
+    const populated = await transaction.populate("customerId", "name phone");
+    res.status(201).json(populated);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to add transaction" });
@@ -37,12 +65,10 @@ exports.addTransaction = async (req, res) => {
 // 📜 GET ALL TRANSACTIONS
 exports.getTransactions = async (req, res) => {
   try {
-    // ✅ CHANGE HERE
     if (!mongoose.Types.ObjectId.isValid(req.userId)) {
       return res.status(400).json({ message: "Invalid user id in token" });
     }
 
-    // ✅ CHANGE HERE
     const userId = new mongoose.Types.ObjectId(req.userId);
 
     const transactions = await Transaction.find({ userId })

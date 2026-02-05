@@ -44,6 +44,7 @@ export const Dashboard = ({ stats }: DashboardProps) => {
   }
 
   const recentTransactions = stats?.recentTransactions ?? [];
+  const normalizeType = (type?: string) => type?.toLowerCase();
 
   return (
     <div className="space-y-6">
@@ -123,7 +124,9 @@ export const Dashboard = ({ stats }: DashboardProps) => {
                 >
                   <div className="flex-1">
                     <p className="font-medium">
-                      {transaction.customerId?.name ?? "Unknown Customer"}
+                      {transaction.customerName ??
+                        transaction.customerId?.name ??
+                        "Unknown Customer"}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {transaction.description}
@@ -132,15 +135,13 @@ export const Dashboard = ({ stats }: DashboardProps) => {
                   <div className="text-right">
                     <p
                       className={`font-semibold ${
-                        (transaction.type ?? "").toLowerCase() === "debt"
+                        normalizeType(transaction.type) === "debt"
                           ? "text-warning"
                           : "text-success"
                       }`}
                     >
-                      {(transaction.type ?? "").toLowerCase() === "debt"
-                        ? "+"
-                        : "-"}
-                      ₹{transaction.amount}
+                      {normalizeType(transaction.type) === "debt" ? "+" : "-"}₹
+                      {transaction.amount}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {new Date(transaction.createdAt).toLocaleDateString()}

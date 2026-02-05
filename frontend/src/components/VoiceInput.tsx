@@ -155,11 +155,12 @@ export const VoiceInput = ({
       return;
     }
 
+    const isEditing = !!editData;
     if (
       !manualCustomerName.trim() ||
-      !manualPhone.trim() ||
       !manualAmount ||
-      !manualDescription.trim()
+      !manualDescription.trim() ||
+      (!isEditing && !manualPhone.trim())
     ) {
       toast({
         title: "Missing information",

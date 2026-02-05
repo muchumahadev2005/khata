@@ -22,7 +22,7 @@ api.interceptors.request.use((config) => {
 ======================= */
 
 export const addTransaction = (data: {
-  name: string;
+  customerName: string;
   phoneNumber: string;
   amount: number;
   description: string;
