@@ -14,7 +14,26 @@ const dashboardRoutes = require('./routes/dashboard.routes'); // ← ADD THIS
 const app = express();
 
 /* ================= MIDDLEWARE ================= */
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:8080",
+  "https://khata.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.options("*", cors()); // ✅ preflight support
+
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
