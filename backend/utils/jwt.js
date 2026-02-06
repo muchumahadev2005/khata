@@ -9,7 +9,7 @@ exports.generateToken = (user) => {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: "7d"           // optional (better UX)
+      expiresIn: "5d"           // optional (better UX)
     }
   );
 };

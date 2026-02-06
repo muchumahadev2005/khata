@@ -34,22 +34,14 @@ const Login = () => {
 
         {/* Google Login */}
         <div className="flex flex-col items-center gap-6">
-          {/* Styled wrapper to MATCH your button UI */}
-          <div className="w-full flex justify-center">
-            <div
-              className="w-full max-w-md flex justify-center"
-              style={{
-                borderRadius: "6px",
-                overflow: "hidden",
-              }}
-            >
+          <div className="flex w-full justify-center px-4">
+            <div className="flex w-full max-w-xs sm:max-w-sm md:max-w-md justify-center">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => alert("Google Login Failed")}
                 theme="filled_blue"
                 size="large"
                 shape="rectangular"
-                width="360"
               />
             </div>
           </div>
