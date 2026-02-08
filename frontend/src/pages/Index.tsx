@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useKhataData } from "@/hooks/useKhataData";
-import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 import { VoiceInput } from "@/components/VoiceInput";
 import { Dashboard } from "@/components/Dashboard";
@@ -9,14 +8,10 @@ import { CustomerList } from "@/components/CustomerList";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { Customer } from "@/types/khata";
 import { LayoutDashboard, Users, History } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [selectedCustomer, setSelectedCustomer] =
     React.useState<Customer | null>(null);
-
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   const {
     customers,
@@ -27,7 +22,6 @@ const Index = () => {
     getStats,
   } = useKhataData();
 
-  /* ✅ FIXED: phoneNumber INCLUDED */
   const handleVoiceCommand = (
     customerName: string,
     phoneNumber: string,
@@ -56,11 +50,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header showAuthButtons={!user} />
+      {/* ✅ FIX: Protected page → NEVER show auth buttons */}
+      <Header showAuthButtons={false} />
 
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6 lg:grid-cols-4">
-          {/* Voice / Manual Input */}
           <div className="lg:col-span-1 space-y-4">
             <VoiceInput
               onVoiceCommand={handleVoiceCommand}
@@ -79,7 +73,6 @@ const Index = () => {
             />
           </div>
 
-          {/* Main Content */}
           <div className="lg:col-span-3">
             <Tabs defaultValue="dashboard" className="space-y-6">
               <TabsList className="grid w-full grid-cols-3">
