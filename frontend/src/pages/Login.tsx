@@ -10,14 +10,13 @@ const Login = () => {
   // ✅ Auto redirect if already logged in
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/", { replace: true });
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
-    if (!credentialResponse?.credential) return;
-    await googleLogin(credentialResponse.credential);
-    // ❌ DO NOT navigate here
+    await googleLogin(credentialResponse.credential); // ✅ ID TOKEN
+    navigate("/");
   };
 
   return (
