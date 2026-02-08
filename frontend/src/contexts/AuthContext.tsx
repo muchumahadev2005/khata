@@ -56,13 +56,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/google", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: googleToken }),
         },
-        body: JSON.stringify({ token: googleToken }),
-      });
+      );
 
       if (!res.ok) {
         throw new Error("Google authentication failed");
