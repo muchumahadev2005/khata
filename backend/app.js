@@ -16,7 +16,7 @@ const app = express();
 /* ================= MIDDLEWARE ================= */
 const allowedOrigins = [
   "http://localhost:8080",
-  "https://khata.vercel.app",
+  "https://khata-pi.vercel.app",
 ];
 
 app.use(
