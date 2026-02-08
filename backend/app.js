@@ -15,8 +15,10 @@ const app = express();
 
 /* ================= MIDDLEWARE ================= */
 const allowedOrigins = [
+  "http://localhost:5173",
   "http://localhost:8080",
-  "https://khata-pi.vercel.app",
+  "https://khata.vercel.app",
+  "https://khata-pi.vercel.app", // ✅ ADD THIS
 ];
 
 app.use(
@@ -31,6 +33,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 app.options("*", cors()); // ✅ preflight support
 
