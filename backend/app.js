@@ -13,38 +13,15 @@ const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
-/* ================= CORS ================= */
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:8080",
-  "https://khata-pi.vercel.app",
-];
+/* ================= MIDDLEWARE ================= */
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // allow Postman / server-to-server
-      if (!origin) return callback(null, true);
+// ✅ SIMPLE CORS (LIKE OLD PROJECT)
+app.use(cors());
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// ✅ PRE-FLIGHT SUPPORT (THIS FIXES YOUR ISSUE)
-app.options("*", cors());
-
-/* ================= OTHER MIDDLEWARE ================= */
+// optional but safe
+app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
-app.use(express.json());
 
 /* ================= ROUTES ================= */
 app.use("/api/auth", authRoutes);
