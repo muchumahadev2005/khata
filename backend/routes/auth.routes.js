@@ -4,7 +4,7 @@ const { googleAuth, login } = require("../controllers/auth.controller");
 
 const router = express.Router();
 
-/* 🔥 VERY IMPORTANT — allow preflight */
+/* 🔥 PRE-FLIGHT */
 router.options("/google", cors());
 
 router.post("/google", googleAuth);

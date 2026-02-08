@@ -11,18 +11,22 @@ const { errorHandler } = require("./middlewares/error.middleware");
 
 const app = express();
 
-/* ✅ SIMPLE CORS (works 100%) */
+/* 🔥 MUST BE FIRST */
 app.use(cors());
 app.options("*", cors());
 
-app.use(express.json());
-app.use(morgan("dev"));
+/* 🔥 DISABLE COOP (Google login fix) */
 app.use(
   helmet({
-    crossOriginOpenerPolicy: false, // 🔥 fixes Google postMessage warning
+    crossOriginOpenerPolicy: false,
+    crossOriginEmbedderPolicy: false,
   })
 );
 
+app.use(express.json());
+app.use(morgan("dev"));
+
+/* ROUTES */
 app.use("/api/auth", authRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/transactions", transactionRoutes);
