@@ -1,196 +1,133 @@
-Smart Credit Speak (Khata App)
+# 💰 Khata – Secure Expense Management System
 
-A modern full-stack credit management system for small shops to track customer debts and payments.
+Khata is a full-stack expense management web application designed to securely manage and track financial transactions.
 
-Built with:
+The system implements both traditional authentication and Google OAuth-based authentication, along with JWT-based authorization and structured REST API design.
 
-⚛️ React (Vite + TypeScript)
+🌐 Live Demo: https://khata-pi.vercel.app/  
+🔗 GitHub Repository: https://github.com/muchumahadev2005/khata
 
-🟢 Node.js + Express
+---
 
-🍃 MongoDB (Mongoose)
+## 🚀 Tech Stack
 
-🔐 Google OAuth Authentication
+### Frontend
+- React.js
+- TypeScript
+- Tailwind CSS
+- Axios (API Communication)
+- Responsive Design
 
-🎨 Tailwind CSS
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+- bcrypt Password Hashing
+- Google OAuth Integration
+- MVC Architecture
+- Environment Variables (.env)
 
-🚀 Features
-🔐 Authentication
+---
 
-Google Sign-In (OAuth 2.0)
+## 🔐 Core Features
 
-JWT-based authentication
+- Secure User Registration & Login
+- Google OAuth-Based Authentication
+- JWT-Based Authorization System
+- Password Encryption using bcrypt
+- Middleware-Protected API Routes
+- CRUD Operations for Expense Tracking
+- User-Specific Data Isolation
+- Environment-Based Secure Configuration
+- Full-Stack Deployment
 
-Protected API routes
+---
 
-👥 Customer Management
+## 👥 Authentication System
 
-Add customers automatically on transaction
+Khata supports two authentication methods:
 
-Soft delete customers
+### 1️⃣ Traditional Authentication
+- User registers with email & password
+- Password hashed using bcrypt
+- JWT token generated upon login
+- Protected routes validated using middleware
 
-Search customers
+### 2️⃣ Google Authentication (OAuth)
+- Users can log in via Google
+- Google token validated on backend
+- Secure session established using JWT
+- User record stored in MongoDB
 
-Real-time balance calculation
+All protected routes require valid JWT verification.
 
-💸 Transactions
+---
 
-Add Debt (customer owes money)
+## 📡 Key API Endpoints
 
-Add Payment (customer paid money)
+### Authentication
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/google
 
-Automatic balance calculation
+### Transactions
+- GET /api/transactions
+- POST /api/transactions
+- PUT /api/transactions/:id
+- DELETE /api/transactions/:id
 
-Transaction history view
+All transaction routes require valid authentication.
 
-📊 Dashboard
+---
 
-Total customers
+## 🏗️ Architecture
 
-Outstanding debt
+Backend follows MVC architecture:
 
-Today's transactions (resets every 24 hours)
+- Models → Database Schemas
+- Controllers → Business Logic
+- Routes → API Endpoints
+- Middleware → Authentication & Authorization
 
-🏗️ Project Structure
-KHATA/
-│
-├── frontend/        → React + Vite app
-│   ├── src/
-│   └── .env
-│
-├── backend/         → Node + Express API
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middlewares/
-│   └── .env
-│
-└── README.md
+This modular structure ensures scalability and maintainability.
 
-⚙️ Setup Instructions
-1️⃣ Clone Repository
-git clone https://github.com/your-username/khata-app.git
-cd khata-app
+---
 
-2️⃣ Backend Setup
-cd backend
+## 🔒 Security Practices
+
+- Password hashing using bcrypt
+- Google OAuth token validation
+- JWT-based authorization
+- Middleware-protected routes
+- Secure environment variable management
+- User-level data isolation
+
+---
+
+## ⚙️ Local Development Setup
+
+Clone the repository:
+
+git clone https://github.com/muchumahadev2005/khata
+cd khata
 npm install
 
 
-Create .env file inside backend:
-
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-GOOGLE_CLIENT_ID=your_google_client_id
-JWT_SECRET=your_jwt_secret
-
-
-Start backend:
+Run the application:
 
 npm run dev
 
-3️⃣ Frontend Setup
-cd frontend
-npm install
+---
 
+## 🎯 Project Objective
 
-Create .env file inside frontend:
+Khata was developed to demonstrate secure backend engineering practices including authentication systems, REST API design, financial transaction management, and full-stack deployment.
 
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
-VITE_API_BASE_URL=http://localhost:5000
+---
 
+## 👨‍💻 Author
 
-Start frontend:
-
-npm run dev
-
-
-Frontend runs at:
-
-http://localhost:8080
-
-
-Backend runs at:
-
-http://localhost:5000
-
-🔐 Google OAuth Setup
-
-Go to Google Cloud Console
-
-Create OAuth 2.0 Client (Web Application)
-
-Add Authorized JavaScript Origins:
-
-http://localhost:8080
-
-
-Copy Client ID into:
-
-backend .env
-
-frontend .env
-
-⚠️ Never expose CLIENT_SECRET in frontend.
-
-🧠 How Authentication Works
-
-User logs in using Google
-
-Google returns ID token
-
-Frontend sends ID token to backend
-
-Backend verifies token using Google
-
-Backend issues JWT
-
-JWT stored in localStorage
-
-All protected routes require JWT
-
-📌 API Endpoints
-🔐 Auth
-POST /api/auth/google
-
-👥 Customers
-GET /api/customers
-DELETE /api/customers/:id
-
-💸 Transactions
-POST /api/transactions
-GET /api/transactions
-
-📊 Dashboard
-GET /api/dashboard
-
-🛡️ Security
-
-Google ID token verified on backend
-
-JWT protected routes
-
-Sensitive keys stored in .env
-
-Client ID is public by design
-
-Client Secret never exposed
-
-📈 Future Improvements
-
-Monthly reports
-
-SMS reminders
-
-Export to PDF
-
-Mobile app (APK)
-
-AWS deployment
-
-Role-based access
-
-🧑‍💻 Author
-
-Mahadev
-Full-Stack Developer (React + Node.js + MongoDB
+Mahadev Muchu  
+GitHub: https://github.com/muchumahadev2005  
+LinkedIn: https://www.linkedin.com/in/mahadev-muchu-a08021375
